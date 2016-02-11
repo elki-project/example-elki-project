@@ -19,7 +19,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<elki.version>0.7.0</elki.version>
+		<elki.version>0.7.1</elki.version>
 	</properties>
 
 	<build>
