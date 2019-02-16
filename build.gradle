@@ -1,0 +1,58 @@
+plugins { id "com.github.johnrengelman.shadow" version "4.0.4" }
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'example'
+version = '0.7.5-SNAPSHOT'
+
+description = """ELKI Example Project"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+  compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // All the core parts
+    compile group: 'de.lmu.ifi.dbs.elki', name: 'elki', version:'0.7.5'
+    // If you want to use visualization:
+    compile group: 'de.lmu.ifi.dbs.elki', name: 'elki-batik-visualization', version:'0.7.5'
+}
+
+task serviceFiles(type: JavaExec, dependsOn: classes) {
+  description "Generate ELKI service files automatically"
+  group "Build"
+  classpath sourceSets.test.runtimeClasspath
+  main "de.lmu.ifi.dbs.elki.application.internal.CheckELKIServices"
+  args "-update"
+  args "${projectDir}/src/main/resources"
+}
+jar.dependsOn serviceFiles
+
+jar {
+  manifest {
+    attributes(
+      "Main-Class" : "de.lmu.ifi.dbs.elki.application.ELKILauncher",
+      "Class-Path": configurations.runtime.collect { "lib/"+it.getName() }.join(' ')
+    )
+  }
+}
+
+shadowJar {
+  dependsOn jar
+  from jar.outputs.files // To include the bundle jar with above notices!
+  configurations = [ project.configurations.runtime ]
+  destinationDir = project.rootDir
+  classifier = null
+  manifest {
+    attributes("Class-Path" : "")
+  }
+  mergeServiceFiles { path = "META-INF/services" } // Batik
+  mergeServiceFiles { path = "META-INF/elki" }
+}
+
+assemble.dependsOn shadowJar
+artifacts.archives shadowJar

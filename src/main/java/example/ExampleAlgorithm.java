@@ -2,7 +2,7 @@ package example;
 
 /* Example algorithm boilerplate, using ELKI.
  *
- * Written in 2015 by Erich Schubert <schube@dbs.ifi.lmu.de>
+ * Written in 2015 by Erich Schubert
  *
  * To the extent possible under law, the author(s) have dedicated all copyright
  * and related and neighboring rights to this file to the public domain worldwide.

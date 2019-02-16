@@ -2,7 +2,7 @@ package example;
 
 /* Example application boilerplate, using ELKI.
  *
- * Written in 2015 by Erich Schubert <schube@dbs.ifi.lmu.de>
+ * Written in 2015 by Erich Schubert
  *
  * To the extent possible under law, the author(s) have dedicated all copyright
  * and related and neighboring rights to this file to the public domain worldwide.
@@ -23,7 +23,6 @@ import de.lmu.ifi.dbs.elki.logging.statistics.LongStatistic;
 import de.lmu.ifi.dbs.elki.logging.statistics.MillisTimeDuration;
 import de.lmu.ifi.dbs.elki.result.Result;
 import de.lmu.ifi.dbs.elki.result.ResultUtil;
-import de.lmu.ifi.dbs.elki.utilities.exceptions.UnableToComplyException;
 import de.lmu.ifi.dbs.elki.utilities.optionhandling.OptionID;
 import de.lmu.ifi.dbs.elki.utilities.optionhandling.constraints.CommonConstraints;
 import de.lmu.ifi.dbs.elki.utilities.optionhandling.parameterization.Parameterization;
@@ -32,7 +31,7 @@ import de.lmu.ifi.dbs.elki.workflow.InputStep;
 
 /**
  * Trivial "main" application to run our example algorithm multiple times.
- *
+ * <p>
  * To run this, you can do the following:
  *
  * <ul>
@@ -40,15 +39,16 @@ import de.lmu.ifi.dbs.elki.workflow.InputStep;
  * configuration. Then edit the configuration to add the missing parameters:
  * <tt>-dbc.in YourInputFile.csv</tt></li>
  * <li>in Eclipse, choose "Run as, Java Application" to create a launch
- * configuration. Then edit the configration, and use the main class
+ * configuration. Then edit the configuration, and use the main class
  * <tt>de.lmu.ifi.dbs.elki.gui.minigui.MiniGUI</tt> to start the MiniGUI, and as
  * first argument use <tt>example.ExampleApplication</tt>. The MiniGUI will
  * create a user interface for your application (notice the -repeat parameter).
  * </li>
- * <li>Run <tt>mvn package</tt> (in Eclipse: Run As, Maven Build) to build a
- * jar. Then invoke this jar on the command line as:
- * <tt>java -jar yourjar.jar example.ExampleApplication</tt> or in the MiniGUI
- * mode as: <tt>java -jar yourjar.jar minigui example.ExampleApplication</tt>
+ * <li>Run <tt>./gradlew assemble</tt> (in Eclipse this can be located in the
+ * Gradle Tasks view) to build a jar. Then invoke this jar on the command line
+ * as: <tt>java -jar example-elki-project-*.jar example.ExampleApplication</tt>
+ * or in the MiniGUI mode as:
+ * <tt>java -jar yourjar.jar minigui example.ExampleApplication</tt>
  * </li>
  * </ul>
  */
@@ -83,7 +83,7 @@ public class ExampleApplication extends AbstractApplication {
   }
 
   @Override
-  public void run() throws UnableToComplyException {
+  public void run() {
     // Force the logging level to include statistics, so we always see the
     // runtimes measured below.
     LoggingConfiguration.setStatistics();
@@ -152,10 +152,10 @@ public class ExampleApplication extends AbstractApplication {
 
       // Create the parameter object, of type integer
       IntParameter repeatP = new IntParameter(REPETITIONS_ID) //
-      // Add a constraint >= 1
-      .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
-      // By default, only 1 repetition:
-      .setDefaultValue(1);
+          // Add a constraint >= 1
+          .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+          // By default, only 1 repetition:
+          .setDefaultValue(1);
 
       // Add the parameter, and get the value (maybe the default value, but can
       // fail if e.g. a negative number was given incorrectly)

@@ -1,21 +1,19 @@
 Example Project for using ELKI
 ==============================
 
-This project uses Maven to download ELKI.
+This project uses Gradle for building and dependency management.
 
-The Eclipse m2e extensions should work fine with this project.
-If necessary, convert to a Maven project, and run Maven Update.
+You need at least Java 1.8.
+
+When using Eclipse, it is recommended to use at minimum Eclipse Neon,
+although it is generally a good idea to install the current version.
 
 
-Building a package:
--------------------
+Compilation
+-----------
 
-The Maven `package` goal will produce a package in the output folder `target`.
-
-All dependencies will be copied into the subdirectory `dependency`.
-
-To launch this, use `mvn package` on the command line, or in Eclipse
-Run As, Maven Build and specify the goal `package`.
+Use `./gradlew assemble` to build the project. This will get the Gradle version,
+download the ELKI modules, and the necessary dependencies.
 
 
 Custom Algorithm Example:
@@ -24,19 +22,13 @@ Custom Algorithm Example:
 This example algorithm computes the mean and variance of each attribute.
 
 
-Launching using Maven:
-----------------------
-
-From command line, you can launch using `mvn -P launch test`.
-
-
 Launching from the jar package:
 -------------------------------
 
-First, build a package as explained above via `mvn package`.
+First, build a package as explained above via `./gradlew assemble`.
 
-`java -jar yourpackage.jar` will spawn the MiniGUI, where you can choose
-your algorithm in the `-algorithm` parameter dropdown.
+`java -jar example-elki-project-*.jar` will spawn the MiniGUI,
+where you can choose your algorithm in the `-algorithm` parameter dropdown.
 
 
 Launching in Eclipse:
@@ -65,14 +57,3 @@ To launch the MiniGUI version, use:
 
 As you can see, ELKI added an option to choose the number of repetitions,
 the new parameter that we have added in our application.
-
-
-Known limitations:
-==================
-
-As of ELKI 0.7.0, classes in the default package cause problems in the MiniGUI.
-Therefore, *always use a package* for your classes. This will be fixed in the
-next ELKI version.
-
-To build and distribute an add-on for ELKI, set the `addClasspath` function
-of the `maven-jar-plugin` to `false` to disable adding dependencies to the jar manifest.
