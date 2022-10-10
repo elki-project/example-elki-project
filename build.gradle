@@ -1,51 +1,51 @@
-plugins { id "com.github.johnrengelman.shadow" version "4.0.4" }
+plugins { id "com.github.johnrengelman.shadow" version "7.1.2" }
 apply plugin: 'java'
-apply plugin: 'maven'
 
 group = 'example'
-version = '0.7.5-SNAPSHOT'
-
+version = '0.8.0'
 description = """ELKI Example Project"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-  compileJava.options.encoding = 'UTF-8'
+// You may choose to use a newer Java version here:
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+compileJava.options.encoding = 'UTF-8'
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     // All the core parts
-    compile group: 'de.lmu.ifi.dbs.elki', name: 'elki', version:'0.7.5'
+    implementation group: 'io.github.elki-project', name: 'elki', version: '0.8.0'
     // If you want to use visualization:
-    compile group: 'de.lmu.ifi.dbs.elki', name: 'elki-batik-visualization', version:'0.7.5'
+    implementation group: 'io.github.elki-project', name: 'elki-batik-visualization', version: '0.8.0'
 }
 
+// Check for missing service file entries:
 task serviceFiles(type: JavaExec, dependsOn: classes) {
   description "Generate ELKI service files automatically"
   group "Build"
   classpath sourceSets.test.runtimeClasspath
-  main "de.lmu.ifi.dbs.elki.application.internal.CheckELKIServices"
+  mainClass = "elki.application.internal.CheckELKIServices"
   args "-update"
   args "${projectDir}/src/main/resources"
 }
 jar.dependsOn serviceFiles
 
+// Jar file
 jar {
   manifest {
     attributes(
-      "Main-Class" : "de.lmu.ifi.dbs.elki.application.ELKILauncher",
-      "Class-Path": configurations.runtime.collect { "lib/"+it.getName() }.join(' ')
+      "Main-Class" : "elki.application.ELKILauncher",
+      "Class-Path": configurations.runtimeClasspath.collect { "lib/"+it.getName() }.join(' ')
     )
   }
 }
 
+// Build a standalone jar file:
 shadowJar {
   dependsOn jar
   from jar.outputs.files // To include the bundle jar with above notices!
-  configurations = [ project.configurations.runtime ]
-  destinationDir = project.rootDir
+  configurations = [ project.configurations.runtimeClasspath ]
+  destinationDirectory = project.rootDir
   classifier = null
   manifest {
     attributes("Class-Path" : "")
